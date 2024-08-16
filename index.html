@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABCBank Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .radio-group label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>ABCBank Form</h1>
+        <form id="myForm">
+            <div class="form-group">
+                <label for="action">Select Action:</label>
+                <select id="action" name="action" required>
+                    <option value="">Select Action</option>
+                    <option value="inquiry">Inquiry</option>
+                    <option value="modify">Modify</option>
+                    <option value="cancel">Cancel</option>
+                    <option value="verification">Verification</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="nameGroup">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <span id="nameError" class="error"></span>
+            </div>
+
+            <div class="form-group" id="emailGroup">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <span id="emailError" class="error"></span>
+            </div>
+
+            <div class="form-group" id="phoneGroup">
+                <label for="phoneno">Phone Number:</label>
+                <input type="tel" id="phoneno" name="phoneno" required>
+                <span id="phoneError" class="error"></span>
+            </div>
+
+            <div class="form-group" id="addressGroup">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="form-group" id="stateGroup">
+                <label for="state">State:</label>
+                <select id="state" name="state" required>
+                    <option value="">Select State</option>
+                    <option value="state1">Province 1</option>
+                    <option value="state2">Madhesh Pradesh</option>
+                    <option value="state3">Bagmati Province</option>
+                    <option value="state4">Gandaki</option>
+                    <option value="state5">Lumbini</option>
+                    <option value="state6">Karnali</option>
+                    <option value="state7">Sudurpaschim</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="locationGroup">
+                <label for="location">Location:</label>
+                <select id="location" name="location" required>
+                    <option value="">Select Location</option>
+                    <option value="location1">Biratnagar</option>
+                    <option value="location2">Janakpur</option>
+                    <option value="location3">Hetauda</option>
+                    <option value="location4">Pokhara</option>
+                    <option value="location5">Butwal</option>
+                    <option value="location6">Birendranagar</option>
+                    <option value="location7">Godawari</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="cashLimitGroup">
+                <label for="cashLimit">Withdrawal Limit One Day:</label>
+                <input type="text" id="cashLimit" name="cashLimit" value="25000" readonly>
+            </div>
+
+            <div class="form-group" id="dateGroup">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group radio-group" id="genderGroup">
+                <label>Gender:</label>
+                <label><input type="radio" name="gender" value="male" required> Male</label>
+                <label><input type="radio" name="gender" value="female" required> Female</label>
+                <label><input type="radio" name="gender" value="other" required> Other</label>
+            </div>
+
+            <div class="form-group" id="statementFrequencyGroup">
+                <label for="statementFrequency">Statement Frequency:</label>
+                <select id="statementFrequency" name="statementFrequency" required>
+                    <option value="">Select Frequency</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        });
+
+        document.getElementById('action').addEventListener('change', function() {
+            const action = this.value;
+            const elementsToShow = ['nameGroup', 'emailGroup', 'phoneGroup'];
+            const elementsToHide = ['nameGroup', 'emailGroup', 'phoneGroup','addressGroup', 'stateGroup', 'locationGroup', 'cashLimitGroup', 'dateGroup', 'genderGroup', 'statementFrequencyGroup'];
+
+            switch (action) {
+                case 'verification':
+                    elementsToShow.forEach(id => document.getElementById(id).style.display = 'block');
+                    document.getElementById('addressGroup').style.display = 'block';
+                    elementsToHide.filter(id => !elementsToShow.includes(id)).forEach(id => document.getElementById(id).style.display = 'none');
+                    break;
+                case 'inquiry':
+                    elementsToShow.forEach(id => document.getElementById(id).style.display = 'block');
+                    document.getElementById('dateGroup').style.display = 'block';
+                    document.getElementById('genderGroup').style.display = 'block';
+                    elementsToHide.filter(id => !elementsToShow.concat('dateGroup', 'genderGroup').includes(id)).forEach(id => document.getElementById(id).style.display = 'none');
+                    break;
+                case 'modify':
+                    [...elementsToShow, 'addressGroup', 'stateGroup', 'locationGroup', 'cashLimitGroup', 'dateGroup', 'genderGroup', 'statementFrequencyGroup'].forEach(id => document.getElementById(id).style.display = 'block');
+                    break;
+                case 'cancel':
+                    [...elementsToShow].forEach(id => document.getElementById(id).style.display = 'block');
+                    elementsToHide.filter(id => !elementsToShow.includes(id)).forEach(id => document.getElementById(id).style.display = 'none');
+                    break;
+                default:
+                    [...elementsToShow, ...elementsToHide].forEach(id => document.getElementById(id).style.display = 'none');
+            }
+        });
+
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission for validation
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phoneno').value;
+            const address = document.getElementById('address').value;
+
+            let isValid = true;
+
+            // Clear previous errors
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('phoneError').textContent = '';
+
+            // Validate Name
+            if (name.trim() === '') {
+                document.getElementById('nameError').textContent = 'Name is required.';
+                isValid = false;
+            } else if (/[^a-zA-Z\s]/.test(name)) {
+                document.getElementById('nameError').textContent = 'Name can only contain letters and spaces.';
+                isValid = false;
+            }
+
+            // Validate Email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('emailError').textContent = 'Invalid email address.';
+                isValid = false;
+            }
+
+            // Validate Phone
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone)) {
+                document.getElementById('phoneError').textContent = 'Phone number must be 10 digits.';
+                isValid = false;
+            }
+
+            // Validate Address
+            if (address.trim() === '') {
+                document.getElementById('addressError').textContent = 'Address is required.';
+                isValid = false;
+            } else if (/[^a-zA-Z\s]/.test(address)) {
+                document.getElementById('addressError').textContent = 'Address can only contain letters and spaces.';
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert('Form is valid and ready for submission!');
+                // You can submit the form or perform further processing here
+            }
+        });
+    </script>
+</body>
+</html>
